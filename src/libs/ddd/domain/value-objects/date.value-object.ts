@@ -1,3 +1,4 @@
+import { ArgumentInvalidException } from "../../../exceptions";
 import { DomainPrimitive, ValueObject } from "../base-classes/value-object.base";
 
 export class DateVO extends ValueObject<Date> {
