@@ -4,6 +4,7 @@ import {
   ArgumentOutOfRangeException,
 } from '../../../exceptions';
 import { Guard } from '../guard';
+import { convertPropsToObject } from '../utils';
 import { DateVO } from '../value-objects/date.value-object';
 import { ID } from '../value-objects/id.value-object';
 
@@ -80,6 +81,27 @@ export abstract class Entity<EntityProps> {
     return this.id ? this.id.equals(object.id) : false;
   }
 
+  /**
+   * Convert an Entity and all sub-entities/ Value Objects it
+   * contains to a plain object with primitive types. Can be
+   * useful when logging an entity during testing/debugging.
+   */
+  public toObject(): unknown {
+    const plainProps = convertPropsToObject(this.props);
+
+    const result = {
+      id: this._id.value,
+      createdAt: this._createdAt.value,
+      updatedAt: this._updatedAt.value,
+      ...plainProps
+    }
+
+    return Object.freeze(result);
+  }
+  
+  /**
+   * Validate invariant
+   */
   public abstract validate(): void;
 
   private validateProps(props: EntityProps): void {
